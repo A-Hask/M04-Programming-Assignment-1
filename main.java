@@ -2,7 +2,7 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
-    
+
     public static void main(String[] args) throws Exception {
         Scanner input = new Scanner(System.in);
         System.out.print("Enter a Java source file: ");
@@ -10,47 +10,64 @@ public class Main {
 
         File file = new File(filename);
         if (file.exists()) {
-           checkPairs(file);
+            if (checkPairs(file)) {
+                System.out.println("The pairs are correct");
+            } else {
+                System.out.println("The pairs are incorrect");
+            }
         } else {
             System.out.println("File " + filename + " does not exist");
         }
     }
 
     public static Boolean checkPairs(File file) throws Exception {
-        int openParentheses = 0;
-        int openBrackets = 0;
-        int closeParentheses = 0;
-        int closeBrackets = 0;
-        int openBraces = 0;
-        int closeBraces = 0;
-    
+
         Scanner input = new Scanner(file);
-    
-        Boolean correct = false;
+        Stack<String> stack = new Stack<>();
+
         while (input.hasNext()){
             String line = input.nextLine();
             String[] words = line.split("");
-            for (int i = 0; i <= words.length; i++){
-                if (words[i].contains("(")) {
-                    openParentheses++;
-                } else if (words[i].contains(")")) {
-                    closeParentheses++;
-                } else if (words[i].contains("[")) {
-                    openBrackets++;
-                } else if (words[i].contains("]")) {
-                    closeBrackets++;
-                } else if (words[i].contains("{")) {
-                    openBraces++;
-                } else if (words[i].contains("}")) {
-                    closeBraces++;
-                } 
-            }
-            if (openParentheses == closeParentheses && openBrackets == closeBrackets && openBraces == closeBraces) {
-                correct = true;
+            for (int i = 0; i < words.length; i++){
+                if (words[i].equals("(")) {
+                    stack.push("(");
+                } else if (words[i].equals(")")) {
+                  	// If the stack is empty, symbols are not balanced
+                    if(stack.isEmpty()) {
+                        return false;
+                    }
+                  	// If the symbol does not match, symbols are overlapped
+                    if(!stack.pop().equals("(")) {
+                        return false;
+                    }
+                } else if (words[i].equals("[")) {
+                    stack.push("[");
+                } else if (words[i].equals("]")) {
+                    if(stack.isEmpty()) {
+                        return false;
+                    }
+                  	if(!stack.pop().equals("[")) {
+                        return false;
+                    }
+                } else if (words[i].equals("{")) {
+                    stack.push("{");
+                } else if (words[i].equals("}")) {
+                    if(stack.isEmpty()) {
+                        return false;
+                    }
+                  	if(!stack.pop().equals("{")) {
+                        return false;
+                    }
+                }
             }
         }
 
-        return correct;
+      	// Check if stack is empty, if it isn't symbols are not balanced
+        if(stack.isEmpty()) {
+          	return true;
+        } else {
+          	return false;
+        }
     }
-        
+
 }
