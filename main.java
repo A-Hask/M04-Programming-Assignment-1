@@ -21,6 +21,8 @@ public class Main {
         int openBrackets = 0;
         int closeParentheses = 0;
         int closeBrackets = 0;
+        int openBraces = 0;
+        int closeBraces = 0;
     
         Scanner input = new Scanner(file);
     
@@ -33,13 +35,17 @@ public class Main {
                     openParentheses++;
                 } else if (words[i].contains(")")) {
                     closeParentheses++;
-                } else if (words[i].contains("{")) {
+                } else if (words[i].contains("[")) {
                     openBrackets++;
-                } else if (words[i].contains("}")) {
+                } else if (words[i].contains("]")) {
                     closeBrackets++;
+                } else if (words[i].contains("{")) {
+                    openBraces++;
+                } else if (words[i].contains("}")) {
+                    closeBraces++;
                 } 
             }
-            if (openParentheses == closeParentheses && openBrackets == closeBrackets) {
+            if (openParentheses == closeParentheses && openBrackets == closeBrackets && openBraces == closeBraces) {
                 correct = true;
             }
         }
